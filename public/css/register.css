@@ -1,0 +1,26 @@
+#register-form {
+	margin-top: 5%;
+	margin-bottom: 5%;
+}
+
+#register-form .card-header {
+	background-color: #494ca2;
+}
+
+#register-form .card-body {
+	background-color: #c6cbef;
+}
+
+#register-button {
+	background: #494ca2;
+	border:none;
+}
+
+#register-button:hover {
+	background: #494ca2;
+	box-shadow: 0px 4px 5px 2px #cccccc;
+}
+
+a.text-dark-purple:hover {
+	color: #494ca2;
+}

@@ -1,0 +1,72 @@
+body {
+	background: #e3e7f1;
+	font-family: 'Roboto', sans-serif;
+}
+
+.roboto {
+	font-family: 'Roboto', sans-serif;
+}
+
+.algera {
+	font-family: 'Alegreya Sans SC', sans-serif;
+}
+
+.bg-light-purple{
+	background: #8186d5;
+	color: white;
+}
+
+.bg-dark-purple {
+	background: #494ca2;
+}
+
+.bg-light-gray {
+	background: #e3e7f1;
+}
+
+.bg-gray {
+	background: #c6cbef;
+}
+
+.bg-light-blue {
+	background-color: #494ca2;
+}
+
+#navbar {
+	box-shadow: 0px 4px 5px 0px #aaabbb;
+}
+
+.brand-name {
+	font-size: 1.8rem;
+}
+
+input:focus, textarea:focus, button:focus {
+	outline: none !important;
+	box-shadow: none !important;
+	border: 0.5px solid #8186d5 !important;
+}
+
+.text-light-purple {
+	color: #8186d5;
+}
+
+.text-dark-purple {
+	color: #494ca2;
+}
+
+#logout-button {
+	border: 1px solid transparent;
+}
+
+#logout-button:hover {
+	background: #494ca2;
+	border: 1px solid white;
+}
+
+/* Responsive */
+
+@media screen and (max-width: 440px) {
+	.brand-name {
+		font-size: 1.4rem;
+	}
+}

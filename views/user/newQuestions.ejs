@@ -1,0 +1,146 @@
+<%- include("../partials/header.ejs") %>
+	<main class="container" style="display:none">
+		<div class="row">
+            <% if(question_id) { %>
+    			<div class="col col-lg-8">
+                    <div class="card bg-transparent border-white" id="video-container">
+                        <div class="card-header pt-0">
+                            <video id="video-recorder" class="video-js vjs-default-skin">Video Recording is not supported!</video>
+                        </div>
+                        <div class="card-footer">
+                            <span class="video-icon" id="saveRecordedVideo" style="display: none"><i class="fa fa-save"></i> <b class="small">Save Video</b></span>
+                        </div>
+                    </div>
+    			</div>
+    			<div class="col col-lg-4" id="questions">
+    				<div class="card" id="new-questions">
+    					<header class="card-header">
+    						<h4 class="card-title text-white algera">New Questions</h4>
+    					</header>
+    					<article class="card-body">
+    						<% if(questions) { let i =1 %>
+    							<% questions.forEach((question) => { %>
+    								<% if(question._id == JSON.parse(question_id)) { %>
+                                            <a href="/question/new?question_id=<%= question._id %>" class="selected-question-link  p-3"><b>Question <%= i %>.</b> <%= question.questionText %></a><hr>
+                                        <% }else { %>
+                                            <a href="/question/new?question_id=<%= question._id %>" class="question-link p-3"><b>Question <%= i %>.</b> <%= question.questionText %></a><hr>
+                                        <% } %>
+    							<% i++ }) %>
+    						<% } %>
+    					</article>
+    				</div>
+    			</div>
+            <% }else { %>
+                <div class="col" id="questions">
+                    <div class="card" id="new-questions">
+                        <header class="card-header">
+                            <h4 class="card-title text-white algera">New Questions</h4>
+                        </header>
+                        <article class="card-body">
+                            <% if(questions) { let i = 1 %>
+                                <% questions.forEach((question) => { %>
+                                    <a href="/question/new?question_id=<%= question._id %>" class="question-link p-3"><b>Question <%= i %>.</b> <%= question.questionText %></a><hr>
+                                <% i++ }) %>
+                            <% } %>
+                        </article>
+                    </div>
+                </div>
+            <% } %>
+		</div>
+	</main>
+<script src="/js/newQuestion.js"></script>
+<% if(question_id) { %>
+<script src="/js/vendor/videoplayer-js/video.min.js"></script>
+<script src="/js/vendor/record-rtc/recordRTC.js"></script>
+<script src="/js/vendor/record-rtc/adapter.js"></script>
+<script src="/js/vendor/video-js/videojs.record.js"></script>
+<script src="/js/vendor/browser-workarounds.js"></script>
+<script>
+	const videoMaxLengthInSeconds = 10
+    let recordedVideo
+
+	applyVideoWorkaround();
+
+    // Inialize the video player
+    var player = videojs("video-recorder", {
+        controls: true,
+        width: 720,
+        height: 480,
+        fluid: false,
+        plugins: {
+            record: {
+                audio: true,
+                video: true,
+                maxLength: videoMaxLengthInSeconds,
+                debug: true
+            }
+        }
+    }, function(){
+        // print version information at startup
+        videojs.log(
+            'Using video.js', videojs.VERSION,
+            'with videojs-record', videojs.getPluginVersion('record'),
+            'and recordrtc', RecordRTC.version
+        );
+    });
+
+    // error handling for getUserMedia
+    player.on('deviceError', function() {
+        console.log('device error:', player.deviceErrorCode);
+    });
+
+    // Handle error events of the video player
+    player.on('error', function(error) {
+        console.log('error:', error);
+    });
+
+    // user clicked the record button and started recording !
+    player.on('startRecord', function() {
+        console.log('started recording! Do whatever you need to');
+        $("#saveRecordedVideo").hide()
+    });
+
+    // user completed recording and stream is available
+    // Upload the Blob to your server or download it locally !
+    player.on('finishRecord', function() {
+        // the blob object contains the recorded data that
+        // can be downloaded by the user, stored on server etc.
+        console.log('finished recording: ', player.recordedData);
+
+        recordedVideo = player.recordedData
+        if(recordedVideo.size > 0) {
+            $("#saveRecordedVideo").show()
+        }
+    });
+
+    $("#saveRecordedVideo").on("click", () => {
+        if(recordedVideo){
+            // Create an instance of FormData and append the video parameter that
+            // will be interpreted in the server as a file
+            const formData = new FormData();
+            formData.append('video', recordedVideo);
+            
+            // Execute the ajax request, in this case we have a very simple PHP script
+            // that accepts and save the uploaded "video" file
+
+            xhr('/question/answer', formData, function (data) {
+                alert(data)
+            });
+
+            // Helper function to send 
+            function xhr(url, data, callback) {
+                var request = new XMLHttpRequest();
+                request.onreadystatechange = function () {
+                    if (request.readyState == 4 && request.status == 200) {
+                        callback(request.responseText);
+                    }
+                };
+                request.open('POST', url);
+                request.setRequestHeader("question_id", <%- question_id %>)
+                request.send(data);
+            }
+        }
+    })
+</script>
+<% } %>
+<%- include("../partials/footer.ejs") %>

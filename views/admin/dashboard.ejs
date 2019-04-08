@@ -1,0 +1,46 @@
+<%- include("../partials/adminHeader.ejs") %>
+	<main style="display:none">
+		<div class="container">
+		<div class="row justify-content-center">
+		<div class="col-md-6">
+		<div class="card" id="question-form">
+		<header class="card-header text-white algera">
+			<h4 class="card-title mt-2">Add Question</h4>
+		</header>
+		<article class="card-body">
+		<form action="/question/add" method="post">
+			<div class="form-group">
+				<label>Question:</label>
+				<input type="text" class="form-control" placeholder="" name="questionText" required>
+			</div>
+		    <div class="form-group">
+		        <button type="submit" class="btn btn-primary btn-block" id="submit-button"> Submit  </button>
+		    </div> <!-- form-group// -->                                              
+		</form>
+		</article> <!-- card-body end .// -->
+		</div> <!-- card.// -->
+		</div> <!-- col.//-->
+
+		<div class="col-md-6">
+			<div class="card" id="question-form">
+                <header class="card-header">
+                    <h4 class="card-title text-white algera">All Questions</h4>
+                </header>
+                <article class="card-body">
+                    <% if(questions) { let i =1 %>
+                        <% questions.forEach((question) => { %>
+                        	<p class="selected-question-link  p-3"><b>Question <%= i %>.</b> <%= question.questionText %></p><hr>
+                        <% i++ }) %>
+                    <% } %>
+                </article>
+            </div>
+		</div>
+
+		</div> <!-- row.//-->
+
+
+		</div> 
+		<!--container end.//-->
+	</main>
+<script src="/js/adminDashboard.js"></script>
+<%- include("../partials/adminFooter.ejs") %>

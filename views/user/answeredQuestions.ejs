@@ -1,0 +1,47 @@
+<%- include("../partials/header.ejs") %>
+	<main class="container" style="display: none">
+        <div class="row">
+            <% if(answer_id) { %>
+                <div class="col col-sm-8">
+                    <video id="videoPlayer" controls autoplay>
+                        <source src="/question/video?answer_id=<%= JSON.parse(answer_id) %>" type="video/mp4">
+                    </video>
+                </div>
+                <div class="col col-sm-4" id="questions">
+                    <div class="card" id="answered-questions">
+                        <header class="card-header">
+                            <h4 class="card-title text-white algera">Answered Questions</h4>
+                        </header>
+                        <article class="card-body">
+                            <% if(questions) { let i =1 %>
+                                <% questions.forEach((question) => { %>
+                                    <% if(question._id == JSON.parse(question_id)) { %>
+                                            <a href="/question/answered?question_id=<%= question._id %>" class="selected-question-link  p-3"><b>Question <%= i %>.</b> <%= question.questionText %></a><hr>
+                                        <% }else { %>
+                                            <a href="/question/answered?question_id=<%= question._id %>" class="question-link p-3"><b>Question <%= i %>.</b> <%= question.questionText %></a><hr>
+                                        <% } %>
+                                <% i++ }) %>
+                            <% } %>
+                        </article>
+                    </div>
+                </div>
+            <% }else { %>
+                <div class="col" id="questions">
+                    <div class="card" id="answered-questions">
+                        <header class="card-header">
+                            <h4 class="card-title text-white algera">Answered Questions</h4>
+                        </header>
+                        <article class="card-body">
+                            <% if(questions) { let i = 1 %>
+                                <% questions.forEach((question) => { %>
+                                    <a href="/question/answered?question_id=<%= question._id %>" class="question-link p-3"><b>Question <%= i %>.</b> <%= question.questionText %></a><hr>
+                                <% i++ }) %>
+                            <% } %>
+                        </article>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </main>
+    <script src="/js/answeredQuestion.js"></script>
+<%- include("../partials/footer.ejs") %>
